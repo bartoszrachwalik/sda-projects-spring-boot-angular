@@ -1,0 +1,47 @@
+package com.github.springboot.angular.player.web;
+
+import com.github.springboot.angular.player.application.PlayerDto;
+import com.github.springboot.angular.player.application.PlayerService;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("players")
+public class PlayerController {
+    private final PlayerService service;
+
+    public PlayerController(PlayerService service) {
+        this.service = service;
+    }
+
+
+    @GetMapping("")
+    public Iterable<PlayerDto> player() {
+        return service.all();
+    }
+
+    @PostMapping("")
+    public PlayerDto save(@RequestBody PlayerDto player) {
+        return service.add(player);
+    }
+
+    @GetMapping("{id}")
+    public PlayerDto show(@PathVariable Integer id) {
+        return service.one(id);
+    }
+
+    @PutMapping("{id}")
+    public PlayerDto update(@PathVariable Integer id, @RequestBody PlayerDto player) {
+        player.setId(id);
+        service.edit(player);
+
+        return player;
+    }
+
+    @DeleteMapping("{id}")
+    public String delete(@PathVariable Integer id) {
+        service.remove(id);
+
+        return "";
+    }
+}
+
